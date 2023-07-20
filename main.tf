@@ -25,7 +25,7 @@ provider "apko" {
 locals {
   startup_commands = [
     # Create a user named "user" with no password and passwordless sudo access.
-    "(adduser -D user -s /bin/bash)",
+    "(adduser -D user -s /bin/sh)",
     "passwd -d user",
     # TODO(mattmoor): This doesn't quite work yet, JO thinks it has to do with a PAM issue.
     "(echo 'user            ALL = (ALL) NOPASSWD: ALL' >> /etc/sudoers)",
