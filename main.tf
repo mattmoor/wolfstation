@@ -31,7 +31,7 @@ locals {
     "(echo 'user            ALL = (ALL) NOPASSWD: ALL' >> /etc/sudoers)",
 
     # Set up and launch sshd, by setting up the host keys and config that allow for empty passwords.
-    "(yes | ssh-keygen -q -f /etc/ssh/ssh_host_rsa_key -t rsa -C 'host' -N '' )",
+    "(yes | ssh-keygen -q -f /etc/ssh/ssh_host_rsa_key -t rsa -C 'host' -N '')",
     "mkdir /var/empty",
     "(echo 'PermitEmptyPasswords yes' > /etc/ssh/sshd_config)",
     "/usr/sbin/sshd",
@@ -64,7 +64,7 @@ module "image" {
     entrypoint = {
       command = "/bin/sh"
     }
-    cmd = "-c '${join("&&", local.startup_commands)}'"
+    cmd = "-c \"${join(" && ", local.startup_commands)}\""
   })
 }
 
