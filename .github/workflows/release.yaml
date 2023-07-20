@@ -1,0 +1,52 @@
+on:
+  push:
+    branches:
+      - main
+
+    paths-ignore:
+      - README.md
+
+  schedule:
+    - cron: '0 0 * * *'
+
+  # Allow manually triggered workflows by maintainers without any parameters to
+  # trigger a proactive rebuild (e.g. when a new package lands)
+  workflow_dispatch: {}
+
+name: Create Release
+
+# Don't run multiple releases concurrently.
+concurrency: release
+
+jobs:
+  build:
+    name: Release OCI image
+    runs-on: ubuntu-latest
+
+    outputs:
+      image-refs: ${{ steps.emit-refs.outputs.image-refs }}
+
+    # https://docs.github.com/en/actions/reference/authentication-in-a-workflow
+    permissions:
+      id-token: write
+      packages: write
+      contents: read
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - uses: docker/login-action@v2
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
+    - uses: hashicorp/setup-terraform@v2
+      with:
+        terraform_version: '1.3.*'
+        terraform_wrapper: false
+
+    - run: |
+        export TF_VAR_target_repository=ghcr.io/${{ github.repository }}
+        terraform init
+        terraform apply -auto-approve
