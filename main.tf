@@ -15,6 +15,12 @@ variable "target_repository" {
   description = "The docker repo into which the image and attestations should be published."
 }
 
+variable "extra_packages" {
+  description = "Additional packages to install."
+  type        = list(string)
+  default     = []
+}
+
 provider "apko" {
   extra_repositories = ["https://packages.wolfi.dev/os"]
   extra_keyring      = ["https://packages.wolfi.dev/os/wolfi-signing.rsa.pub"]
@@ -27,8 +33,6 @@ locals {
     # Create a user named "user" with no password and passwordless sudo access.
     "(adduser -D user -s /bin/sh)",
     "passwd -d user",
-    # TODO(mattmoor): This doesn't quite work yet, JO thinks it has to do with a PAM issue.
-    "(echo 'user            ALL = (ALL) NOPASSWD: ALL' >> /etc/sudoers)",
 
     # Set up and launch sshd, by setting up the host keys and config that allow for empty passwords.
     "(yes | ssh-keygen -q -f /etc/ssh/ssh_host_rsa_key -t rsa -C 'host' -N '')",
@@ -47,23 +51,15 @@ module "image" {
   target_repository = var.target_repository
   config = jsonencode({
     contents = {
-      packages = [
-        # This is so we have a shell and posix tools
+      packages = concat([
+        # This is so we have a shell and posix tools (e.g. we need this for sh, sleep, adduser)
         "busybox",
 
         # This is how Cloud Workstations connects to the container.
         "openssh-server",
-
-        # To do stuff with GCP (this is super fat)
-        "google-cloud-sdk",
-
-        # TODO(mattmoor): Get this working, but sudo-rs and PAM don't get along.
-        "sudo-rs",
-      ]
+      ], var.extra_packages)
     }
-    entrypoint = {
-      command = "/bin/sh"
-    }
+    entrypoint = { command = "/bin/sh" }
     cmd = "-c \"${join(" && ", local.startup_commands)}\""
   })
 }
