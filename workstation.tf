@@ -25,6 +25,8 @@ resource "google_workstations_workstation_cluster" "default" {
   location               = var.region
 }
 
+data "google_compute_default_service_account" "default" {}
+
 resource "google_workstations_workstation_config" "default" {
   provider               = google-beta
   workstation_config_id  = var.name
@@ -36,9 +38,12 @@ resource "google_workstations_workstation_config" "default" {
 
   host {
     gce_instance {
-      machine_type                = var.machine_type
-      boot_disk_size_gb           = var.disk_gb
-      disable_public_ip_addresses = true
+      machine_type      = var.machine_type
+      boot_disk_size_gb = var.disk_gb
+      // TODO: make this true and figure out how to give it access to the image.
+      disable_public_ip_addresses = false
+      // TODO: Use a less permissive service account.
+      service_account = data.google_compute_default_service_account.default.email
     }
   }
 

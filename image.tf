@@ -23,6 +23,7 @@ locals {
 module "image" {
   source = "chainguard-dev/apko/publisher"
 
+  // TODO: use Artifact Registry, pre-create this repo.
   target_repository = "gcr.io/${var.project}/${var.name}"
   config = jsonencode({
     contents = {

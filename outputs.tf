@@ -3,7 +3,7 @@ Copyright 2023 Chainguard, Inc.
 SPDX-License-Identifier: Apache-2.0
 */
 
-locals { local_port = 22 }
+locals { local_port = 1234 }
 
 output "start_command" {
   value = <<EOF
