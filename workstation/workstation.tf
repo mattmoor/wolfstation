@@ -3,6 +3,11 @@ Copyright 2023 Chainguard, Inc.
 SPDX-License-Identifier: Apache-2.0
 */
 
+provider "google" {
+  project = var.project
+  region  = var.region
+}
+
 resource "google_compute_network" "default" {
   provider                = google-beta
   name                    = var.name
@@ -48,7 +53,7 @@ resource "google_workstations_workstation_config" "default" {
   }
 
   container {
-    image = module.image.image_ref
+    image = var.image
   }
 }
 

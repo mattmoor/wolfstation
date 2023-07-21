@@ -49,4 +49,4 @@ jobs:
     - run: |
         export TF_VAR_target_repository=ghcr.io/${{ github.repository }}
         terraform init
-        terraform apply -auto-approve
+        terraform apply -auto-approve -target=module.image

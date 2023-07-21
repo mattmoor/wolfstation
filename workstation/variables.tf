@@ -5,7 +5,6 @@ SPDX-License-Identifier: Apache-2.0
 
 variable "project" {
   description = "The project in which to create the cluster."
-  default     = ""
 }
 
 variable "region" {
@@ -38,13 +37,6 @@ variable "running_timeout" {
   default     = "21600s"
 }
 
-variable "target_repository" {
-  description = "The repository to push the image to."
-  default     = ""
-}
-
-variable "extra_packages" {
-  description = "Additional packages to install."
-  type        = list(string)
-  default     = []
+variable "image" {
+  description = "The image to use for the cluster."
 }

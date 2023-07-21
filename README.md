@@ -17,6 +17,13 @@ terraform apply
 This will build and deploy the image to a workstation cluster in your project,
 and print commands to run to start and connect to the workstation using SSH.
 
+If you want to just build and push the image, you can run:
+
+```shell
+export TF_VAR_target_repository=ttl.sh/wolfstation
+terraform apply -target=module.image
+```
+
 ### Cleanup
 
 Cloud Workstations will stop when not being actively used, but they still

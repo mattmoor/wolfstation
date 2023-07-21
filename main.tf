@@ -19,7 +19,26 @@ provider "apko" {
   extra_packages     = ["wolfi-baselayout"]
 }
 
-provider "google" {
-  project = var.project
-  region  = var.region
+module "image" {
+  source = "./image"
+
+  target_repository = var.target_repository != "" ? var.target_repository : "gcr.io/${var.project}/${var.name}"
+  extra_packages    = var.extra_packages
+}
+
+module "workstation" {
+  source = "./workstation"
+
+  image           = module.image.image_ref
+  project         = var.project
+  region          = var.region
+  name            = var.name
+  machine_type    = var.machine_type
+  disk_gb         = var.disk_gb
+  idle_timeout    = var.idle_timeout
+  running_timeout = var.running_timeout
+}
+
+output "ssh_command" {
+  value = module.workstation.ssh_command
 }
