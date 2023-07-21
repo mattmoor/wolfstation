@@ -1,7 +1,7 @@
 # Wolfstation
 
-This repo demonstrates a building a minimal image for using a
-[Wolfi](https://wolfi.dev/os)-based image and deploying it to
+This repo demonstrates a building a minimal [Wolfi](https://wolfi.dev/os)-based
+image and deploying it to
 [Google Cloud Workstations](https://cloud.google.com/workstations/).
 
 ### Usage
@@ -20,7 +20,7 @@ and print commands to run to start and connect to the workstation using SSH.
 ### Cleanup
 
 Cloud Workstations will stop when not being actively used, but they still
-[cost money](https://cloud.google.com/workstations/) even when idle. To avoid
+[cost money](https://cloud.google.com/workstations/pricing/) even when idle. To avoid
 unnecessary costs, you can delete the cluster if you're just experimenting:
 
 ```shell
