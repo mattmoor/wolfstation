@@ -39,6 +39,5 @@ module "workstation" {
   running_timeout = var.running_timeout
 }
 
-output "ssh_command" {
-  value = module.workstation.ssh_command
-}
+output "ssh_command" { value = module.workstation.ssh_command }
+output "stop_command" { value = module.workstation.stop_command }

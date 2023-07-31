@@ -24,6 +24,7 @@ resource "google_compute_subnetwork" "default" {
 
 resource "google_workstations_workstation_cluster" "default" {
   provider               = google-beta
+  project                = var.project
   workstation_cluster_id = var.name
   network                = google_compute_network.default.id
   subnetwork             = google_compute_subnetwork.default.id
@@ -34,6 +35,7 @@ data "google_compute_default_service_account" "default" {}
 
 resource "google_workstations_workstation_config" "default" {
   provider               = google-beta
+  project                = var.project
   workstation_config_id  = var.name
   workstation_cluster_id = google_workstations_workstation_cluster.default.workstation_cluster_id
   location               = var.region
@@ -59,6 +61,7 @@ resource "google_workstations_workstation_config" "default" {
 
 resource "google_workstations_workstation" "default" {
   provider               = google-beta
+  project                = var.project
   workstation_id         = var.name
   workstation_config_id  = google_workstations_workstation_config.default.workstation_config_id
   workstation_cluster_id = google_workstations_workstation_cluster.default.workstation_cluster_id
